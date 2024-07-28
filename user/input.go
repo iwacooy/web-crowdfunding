@@ -7,3 +7,12 @@ type RegisterUserInput struct {
 	Password  string `json:"password" binding:"required"`
 	Token     string `json:"token"`
 }
+
+type LoginInput struct {
+	Email    string `json:"email" binding:"required,email"`
+	Password string `json:"password" binding:"required"`
+}
+
+type CheckEmailAvailableInput struct {
+	Email string `json:"email" binding:"required,email"`
+}
