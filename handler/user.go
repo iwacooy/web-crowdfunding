@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"web-crowdfunding/helper"
 	"web-crowdfunding/user"
@@ -100,6 +101,41 @@ func (h *userHandler) IsEmailAvailable(c *gin.Context) {
 	}
 
 	response := helper.ResponseAPI(metaMsg, http.StatusOK, "Sukses", data)
+	c.JSON(http.StatusOK, response)
+
+}
+
+func (h *userHandler) UploadAvatar(c *gin.Context) {
+	file, err := c.FormFile("avatar")
+	if err != nil {
+		if err != nil {
+			errorMsg := gin.H{"error": err.Error()}
+			response := helper.ResponseAPI("Upload Avatar Failed", http.StatusBadRequest, "failed", errorMsg)
+			c.JSON(http.StatusBadRequest, response)
+			return
+		}
+	}
+
+	userID := 1
+	path := fmt.Sprintf("images/%d-%s", userID, file.Filename)
+	err = c.SaveUploadedFile(file, path)
+	if err != nil {
+		errorMsg := gin.H{"error": err.Error()}
+		response := helper.ResponseAPI("Upload Avatar Failed", http.StatusBadRequest, "failed", errorMsg)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	_, err = h.userService.SaveAvatar(1, path)
+	if err != nil {
+		errorMsg := gin.H{"error": err.Error()}
+		response := helper.ResponseAPI("Upload Avatar Failed", http.StatusBadRequest, "failed", errorMsg)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	msg := gin.H{"is_uploaded": true}
+	response := helper.ResponseAPI("Avatar successfully uploaded", http.StatusOK, "Sukses", msg)
 	c.JSON(http.StatusOK, response)
 
 }

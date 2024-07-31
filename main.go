@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	dsn := "root:@tcp(127.0.0.1:3306)/web-crowdfunding?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:@tcp(127.0.0.1:3306)/test?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
@@ -26,7 +26,7 @@ func main() {
 	// 	Password: "formatter123",
 	// }
 
-	// user, err := userService.Login(login)
+	// user, err := userService.Login(login)//
 
 	// if err != nil {
 	// 	fmt.Println(err)
@@ -53,6 +53,7 @@ func main() {
 	api.POST("/users", userHandler.RegisterUser)
 	api.POST("/login", userHandler.Login)
 	api.POST("/check_email", userHandler.IsEmailAvailable)
+	api.POST("/avatars", userHandler.UploadAvatar)
 
 	router.Run()
 	// user := user.User{
