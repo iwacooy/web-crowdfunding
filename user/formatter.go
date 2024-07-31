@@ -8,13 +8,13 @@ type UserFormat struct {
 	Token     string `json:"token"`
 }
 
-func NewUserFormat(user User) UserFormat {
+func NewUserFormat(user User, token string) UserFormat {
 	formatUser := UserFormat{
 		ID:        user.ID,
 		Nama:      user.Nama,
 		Pekerjaan: user.Pekerjaan,
 		Email:     user.Email,
-		Token:     user.Token,
+		Token:     token,
 	}
 
 	return formatUser

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"web-crowdfunding/auth"
 	"web-crowdfunding/handler"
 	"web-crowdfunding/user"
 
@@ -10,7 +11,7 @@ import (
 )
 
 func main() {
-	dsn := "root:@tcp(127.0.0.1:3306)/test?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:@tcp(127.0.0.1:3306)/web-crowdfunding?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
@@ -19,7 +20,10 @@ func main() {
 
 	userRepository := user.NewRepository(db)
 	userService := user.NewService(userRepository)
-	userHandler := handler.NewUserHandler(userService)
+	authService := auth.NewAuthService()
+	userHandler := handler.NewUserHandler(userService, authService)
+
+	// fmt.Println(authService.GenerateToken(1001))
 
 	// login := user.LoginInput{
 	// 	Email:    "formatter9@example.com",
