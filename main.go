@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 	"web-crowdfunding/auth"
+	"web-crowdfunding/campaign"
 	"web-crowdfunding/handler"
 	"web-crowdfunding/helper"
 	"web-crowdfunding/user"
@@ -26,6 +28,24 @@ func main() {
 	userService := user.NewService(userRepository)
 	authService := auth.NewAuthService()
 	userHandler := handler.NewUserHandler(userService, authService)
+
+	//============================Campaign==================================//
+
+	campaignRepository := campaign.NewRepository(db)
+	campaigns, _ := campaignRepository.FindById(2)
+
+	fmt.Println("Debug")
+	fmt.Println(len(campaigns))
+
+	for _, campaign := range campaigns {
+		fmt.Println(campaign.Name)
+		if len(campaign.CampaignImages) > 0 {
+			fmt.Println(campaign.CampaignImages[0].FileName)
+		} else {
+			fmt.Println(campaign.Name, "Tidak memiliki gambar")
+		}
+
+	}
 
 	// fmt.Println(authService.GenerateToken(1001))
 
